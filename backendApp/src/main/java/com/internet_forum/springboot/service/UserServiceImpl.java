@@ -1,85 +1,35 @@
 package com.internet_forum.springboot.service;
 
 
-import com.internet_forum.springboot.Exceptions.UserAlreadyExistsException;
 import com.internet_forum.springboot.model.User;
 import com.internet_forum.springboot.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.internet_forum.springboot.enums.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
+        private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+        public void registerNewUser(User user) {
 
-    }
-
-    @Override
-    public User saveUser(User user) throws UserAlreadyExistsException {
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser.isPresent()) {
-            throw new UserAlreadyExistsException("User with this email already exists");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(Role.USER);
+            userRepository.save(user);
         }
 
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Optional<User> loginUser(String email, String rawPassword) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            return user;
+        public User findByUsername(String username) {
+            return userRepository.findByUsername(username);
         }
-        return Optional.empty();
-    }
 
-    @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public void deleteAllUsers() {
-        userRepository.deleteAll();
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public Long length() {
-        return userRepository.count();
-    }
-
-    @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-
-    @Override
-    public User updateUser(User updatedUser) {
-        return userRepository.save(updatedUser);
-    }
 
 }

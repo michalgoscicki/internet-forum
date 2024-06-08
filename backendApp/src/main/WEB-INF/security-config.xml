@@ -1,0 +1,51 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+                http://www.springframework.org/schema/security
+                http://www.springframework.org/schema/security/spring-security-3.0.xsd
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <http auto-config="true" use-expressions="true">
+        <!-- Pozwolenie na dostęp do endpointów rejestracji i pobierania użytkowników bez uwierzytelnienia -->
+        <intercept-url pattern="/api/register" access="permitAll" />
+        <intercept-url pattern="/api/login" access="permitAll" />
+        <intercept-url pattern="/api/user/**" access="permitAll" />
+        <!-- Ochrona reszty endpointów -->
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/user/**" access="hasRole('ROLE_USER')" />
+
+        <!-- Wyłączenie domyślnego formularza logowania -->
+        <form-login login-page="/login" login-processing-url="/api/login" />
+        <logout logout-url="/api/logout" />
+
+
+        <logout logout-url="/api/logout"
+                logout-success-url="/api/logout/success"
+                invalidate-session="true"
+        />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="adminpass" authorities="ROLE_ADMIN" />
+                <user name="user" password="userpass" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <!-- Rejestracja beanów serwisów i repozytoriów -->
+    <beans:bean id="userService" class="com.internet_forum.springboot.service.UserService" abstract="true"/>
+    <beans:bean id="userRepository" class="com.internet_forum.springboot.repository.UserRepository" abstract="true"/>
+
+
+
+<!--    &lt;!&ndash; Handlery obsługujące sukces i porażkę logowania &ndash;&gt;-->
+<!--    <beans:bean id="customAuthenticationSuccessHandler" class="com.internet_forum.springboot.security.CustomAuthenticationSuccessHandler"/>-->
+<!--    <beans:bean id="customAuthenticationFailureHandler" class="com.internet_forum.springboot.security.CustomAuthenticationFailureHandler"/>-->
+
+</beans:beans>
