@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/topics")
+@RequestMapping("/api/v1/topics")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TopicController {
 
     private TopicService topicService;

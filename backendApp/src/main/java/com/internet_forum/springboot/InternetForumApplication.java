@@ -13,9 +13,6 @@ public class InternetForumApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InternetForumApplication.class, args);
 	}
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 
 }

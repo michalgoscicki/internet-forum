@@ -1,11 +1,11 @@
 package com.internet_forum.springboot.dto;
 
-import com.internet_forum.springboot.model.User;
+import com.internet_forum.springboot.model.UserEntity;
 
 public record TopicResponseDto(
         Long id,
         String title,
-        User author
+        UserEntity author
 //        PostResponseDto posts
 //        ViolationReportResponseDto violationReports
         ) {

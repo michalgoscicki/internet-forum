@@ -1,14 +1,14 @@
 package com.internet_forum.springboot.dto;
 
 import com.internet_forum.springboot.model.Topic;
-import com.internet_forum.springboot.model.User;
+import com.internet_forum.springboot.model.UserEntity;
 
 import java.time.LocalDateTime;
 
 public record PostResponseDto(
         Long id,
         Topic topic,
-        User author,
+        UserEntity author,
         String content,
         LocalDateTime createdAt
 
