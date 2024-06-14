@@ -9,6 +9,7 @@ import com.internet_forum.springboot.repository.TopicRepository;
 import com.internet_forum.springboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,4 +47,15 @@ public class TopicServiceImpl implements TopicService {
         return topicRepository.findById(id)
                 .map(topicMapper::entityToResponseDto);
     }
+
+    @Override
+    public void deleteTopic() {
+        topicRepository.deleteAll();
+    }
+
+    @Override
+    public void deleteTopicById(Long id) {
+        topicRepository.deleteById(id);
+    }
+
 }
