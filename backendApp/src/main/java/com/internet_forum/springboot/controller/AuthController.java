@@ -50,7 +50,7 @@ public class AuthController {
                 loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDTO(token, (UserEntity) authentication.getPrincipal()), HttpStatus.OK);
     }
 
     @PostMapping("/register")
