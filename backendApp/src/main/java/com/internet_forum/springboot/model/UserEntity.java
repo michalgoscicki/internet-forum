@@ -1,6 +1,9 @@
 package com.internet_forum.springboot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,14 +24,28 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email should be valid")
     private String email;
 
+    @NotBlank(message = "Name is mandatory")
+    @Size(max = 50, message = "Name can have at most 50 characters")
+    @Size(min = 2, message = "Name can have at least 2 characters")
     private String name;
 
+    @NotBlank(message = "Surname is mandatory")
+    @Size(max = 50, message = "Surname can have at most 50 characters")
+    @Size(min = 2, message = "Surname can have at least 2 characters")
     private String surname;
 
+    @NotBlank(message = "Username is mandatory")
+    @Size(max = 50, message = "Username can have at most 50 characters")
+    @Size(min = 2, message = "Username can have at least 2 characters")
     private String username;
 
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 5, message = "Password can have at least 5 characters")
     private String password;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
