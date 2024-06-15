@@ -1,10 +1,11 @@
 package com.internet_forum.springboot.controller;
 
-import com.internet_forum.springboot.dto.TopicRequestDto;
-import com.internet_forum.springboot.dto.TopicResponseDto;
+import com.internet_forum.springboot.dto.*;
 import com.internet_forum.springboot.model.Topic;
 import com.internet_forum.springboot.model.UserEntity;
+import com.internet_forum.springboot.repository.PostRepository;
 import com.internet_forum.springboot.repository.TopicRepository;
+import com.internet_forum.springboot.repository.UserRepository;
 import com.internet_forum.springboot.service.TopicService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,14 @@ public class TopicController {
 
     private final TopicService topicService;
     private final TopicRepository topicRepository;
+    private final PostRepository postRepository;
 
 
-    public TopicController(TopicService topicService, TopicRepository topicRepository) {
+
+    public TopicController(TopicService topicService, TopicRepository topicRepository, PostRepository postRepository) {
         this.topicRepository = topicRepository;
         this.topicService = topicService;
+        this.postRepository = postRepository;
     }
 
 
@@ -60,13 +64,20 @@ public class TopicController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTopicById(@PathVariable("id") long topicId) {
+    @DeleteMapping("/{topic_id}")
+    public ResponseEntity<String> deleteTopicById(@PathVariable("topic_id") long topicId) {
         if (topicRepository.existsById(topicId)) {
             topicRepository.deleteById(topicId);
             return new ResponseEntity<>("Topic deleted successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Topic not found",HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/{topic_id}/post")
+    public TopicResponseDto addPost(@RequestBody PostRequestDto post, @PathVariable("topic_id") long topicId, Authentication authentication){
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        Long userId = userEntity.getId();
+        return topicService.addPost(post, userId,topicId);
     }
 }

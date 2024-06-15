@@ -1,19 +1,21 @@
 package com.internet_forum.springboot.mapper;
 
-import com.internet_forum.springboot.dto.TopicAuthorEntityResponseDto;
+import com.internet_forum.springboot.dto.AuthorEntityResponseDto;
+import com.internet_forum.springboot.dto.PostResponseDto;
 import com.internet_forum.springboot.dto.TopicRequestDto;
 import com.internet_forum.springboot.dto.TopicResponseDto;
 import com.internet_forum.springboot.model.Post;
 import com.internet_forum.springboot.model.Topic;
 import com.internet_forum.springboot.model.UserEntity;
 import com.internet_forum.springboot.model.ViolationReport;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-14T22:34:21+0200",
+    date = "2024-06-15T19:53:53+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -49,19 +51,21 @@ public class TopicMapperImpl implements TopicMapper {
         Long id = null;
         String title = null;
         String content = null;
-        TopicAuthorEntityResponseDto author = null;
+        AuthorEntityResponseDto author = null;
+        List<PostResponseDto> posts = null;
 
         id = topic.getId();
         title = topic.getTitle();
         content = topic.getContent();
-        author = userEntityToTopicAuthorEntityResponseDto( topic.getAuthor() );
+        author = userEntityToAuthorEntityResponseDto( topic.getAuthor() );
+        posts = postListToPostResponseDtoList( topic.getPosts() );
 
-        TopicResponseDto topicResponseDto = new TopicResponseDto( id, title, content, author );
+        TopicResponseDto topicResponseDto = new TopicResponseDto( id, title, content, author, posts );
 
         return topicResponseDto;
     }
 
-    protected TopicAuthorEntityResponseDto userEntityToTopicAuthorEntityResponseDto(UserEntity userEntity) {
+    protected AuthorEntityResponseDto userEntityToAuthorEntityResponseDto(UserEntity userEntity) {
         if ( userEntity == null ) {
             return null;
         }
@@ -72,8 +76,37 @@ public class TopicMapperImpl implements TopicMapper {
         id = userEntity.getId();
         username = userEntity.getUsername();
 
-        TopicAuthorEntityResponseDto topicAuthorEntityResponseDto = new TopicAuthorEntityResponseDto( id, username );
+        AuthorEntityResponseDto authorEntityResponseDto = new AuthorEntityResponseDto( id, username );
 
-        return topicAuthorEntityResponseDto;
+        return authorEntityResponseDto;
+    }
+
+    protected PostResponseDto postToPostResponseDto(Post post) {
+        if ( post == null ) {
+            return null;
+        }
+
+        Long id = null;
+        String content = null;
+
+        id = post.getId();
+        content = post.getContent();
+
+        PostResponseDto postResponseDto = new PostResponseDto( id, content );
+
+        return postResponseDto;
+    }
+
+    protected List<PostResponseDto> postListToPostResponseDtoList(List<Post> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<PostResponseDto> list1 = new ArrayList<PostResponseDto>( list.size() );
+        for ( Post post : list ) {
+            list1.add( postToPostResponseDto( post ) );
+        }
+
+        return list1;
     }
 }
