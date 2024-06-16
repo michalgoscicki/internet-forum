@@ -3,7 +3,6 @@ package com.internet_forum.springboot.service;
 
 import com.internet_forum.springboot.Exceptions.UserDoNotExist;
 import com.internet_forum.springboot.model.UserEntity;
-import com.internet_forum.springboot.repository.RoleRepository;
 import com.internet_forum.springboot.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +14,9 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
 
