@@ -42,15 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(int id) {
-        Optional<UserEntity> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            UserEntity user = userOptional.get();
-            user.getRoles().clear();
-            userRepository.save(user);
-            userRepository.deleteById(id);
-        } else {
-            throw new UserDoNotExist("User not found with id: " + id);
-        }
+
     }
 
 
