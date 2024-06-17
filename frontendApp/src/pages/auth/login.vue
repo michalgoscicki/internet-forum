@@ -7,7 +7,29 @@ const user = reactive({
 const loginError = ref('')
 
 const login = async () => {
-  console.log('login')
+  if (!user.username || !user.password) {
+    console.error('Wszystkie pola są wymagane')
+    return
+  }
+
+  const auth = useAuthStore()
+  const router = useRouter()
+
+  await auth.login(user.username, user.password)
+      .catch(
+          async err => {
+            console.error(err.data)
+            loginError.value = 'Nie udana próba logowania! Spróbuj ponownie!'
+            const errorTime = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+            await errorTime(2000)
+            loginError.value = ''
+          }
+      )
+  if (auth.token) {
+    await router.push('/')
+  }
+  console.log(auth.user)
+  console.log(auth.token)
 }
 </script>
 
@@ -42,7 +64,7 @@ const login = async () => {
               class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-blue-500 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white p-0.5rem"
           />
         </div>
-        <p class="text-rose-500 font-semibold absolute">{{ loginError }}</p>
+        <p v-if="loginError" class="text-rose-500 animate-rubber-band font-semibold absolute">{{ loginError }}</p>
         <button class="bg-emerald-600 color-black px-6 py-3 rounded-md mt-2rem" type="submit">Zaloguj się</button>
       </div>
 
