@@ -4,5 +4,20 @@ export default defineNuxtConfig({
     modules: [
         '@pinia/nuxt', '@unocss/nuxt', '@vueuse/nuxt', '@nuxt/ui',
     ],
+    srcDir: "src/",
     ssr: false,
+
+    pinia: {
+        autoImports: [
+            'defineStore',
+            'acceptHMRUpdate',
+        ]
+    },
+
+    runtimeConfig: {
+        public: {
+            NUXT_APP_BASE_URL: process.env.BASEURL
+        }
+    },
+
 })
