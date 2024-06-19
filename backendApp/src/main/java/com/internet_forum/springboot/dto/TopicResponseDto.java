@@ -11,5 +11,5 @@ public record TopicResponseDto(
         AuthorEntityResponseDto author,
         List<PostResponseDto> posts
 //        ViolationReportResponseDto violationReports
-        ) {
+) {
 }
