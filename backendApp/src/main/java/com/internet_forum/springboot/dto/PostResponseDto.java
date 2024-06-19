@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 public record PostResponseDto(
         Long id,
-        String content
+        String content,
+        AuthorEntityResponseDto author
+
 
 ) { }
