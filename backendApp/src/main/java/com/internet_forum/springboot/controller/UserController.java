@@ -1,11 +1,13 @@
 package com.internet_forum.springboot.controller;
 
+import com.internet_forum.springboot.dto.TopicResponseDto;
 import com.internet_forum.springboot.model.UserEntity;
 import com.internet_forum.springboot.repository.UserRepository;
 import com.internet_forum.springboot.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,6 +57,12 @@ public class UserController {
         Optional<UserEntity> user = userService.findByEmail(email);
         return user.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    //TODO za 3h wracam i to zrobię
+//    @GetMapping("followedTopics")
+//    public List<TopicResponseDto> getFollowedTopics(Authentication authentication){
+//
+//    }
 
 
 

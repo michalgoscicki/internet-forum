@@ -58,12 +58,6 @@ public class TopicController {
     }
 
 
-    @DeleteMapping
-    public void deleteTopic() {
-        topicService.deleteTopic();
-    }
-
-
     @DeleteMapping("/{topic_id}")
     public ResponseEntity<String> deleteTopicById(@PathVariable("topic_id") long topicId) {
         if (topicRepository.existsById(topicId)) {
@@ -79,5 +73,22 @@ public class TopicController {
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         Long userId = userEntity.getId();
         return topicService.addPost(post, userId,topicId);
+    }
+
+    @DeleteMapping("/{topic_id}/post/{post_id}")
+    public ResponseEntity<String> deletePostById(@PathVariable("post_id") long postId){
+        if (postRepository.existsById(postId)) {
+            postRepository.deleteById(postId);
+            return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Post not found",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{topic_id}/watchlist")
+    public ResponseEntity<String> followTopic(@PathVariable("topic_id") long topicId, Authentication authentication){
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        Long userId = userEntity.getId();
+        return topicService.followTopic(topicId, userId);
     }
 }

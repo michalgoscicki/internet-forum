@@ -1,9 +1,6 @@
 package com.internet_forum.springboot.service;
 
-import com.internet_forum.springboot.dto.PostRequestDto;
-import com.internet_forum.springboot.dto.PostResponseDto;
-import com.internet_forum.springboot.dto.TopicRequestDto;
-import com.internet_forum.springboot.dto.TopicResponseDto;
+import com.internet_forum.springboot.dto.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,11 +12,13 @@ public interface TopicService {
 
     Optional<TopicResponseDto> getTopicById(Long id);
 
-    void deleteTopic();
-
     void deleteTopicById(Long id);
 
     TopicResponseDto addPost(PostRequestDto postRequestDto, Long userId, Long topicId);
+
+    ResponseEntity<String> followTopic(Long topicId, Long userId);
+
+
 
 }
 

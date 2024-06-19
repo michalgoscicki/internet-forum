@@ -2,17 +2,20 @@ package com.internet_forum.springboot.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Topic {
+public class Topic extends BaseDatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
     private String title;
+
+    private LocalDateTime createdAt;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -25,11 +28,12 @@ public class Topic {
     private List<ViolationReport> violationReports = new ArrayList<>();
 
     protected Topic(){}
-    public Topic(String title, UserEntity author, List<Post> posts, List<ViolationReport> violationReports) {
+    public Topic(String title, UserEntity author, List<Post> posts, List<ViolationReport> violationReports, LocalDateTime createdAt) {
         this.title = title;
         this.author = author;
         this.posts = posts;
         this.violationReports = violationReports;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -78,5 +82,15 @@ public class Topic {
 
     public void setViolationReports(List<ViolationReport> violationReports) {
         this.violationReports = violationReports;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

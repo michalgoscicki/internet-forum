@@ -7,11 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-
-
     UserEntity updateUser(UserEntity updatedUser);
-
-
 
     void deleteById(int id);
 
@@ -20,4 +16,6 @@ public interface UserService {
     List<UserEntity> getAllUsers();
 
     Optional<UserEntity> findByEmail(String email);
+
+    boolean isAdmin(int id);
 }

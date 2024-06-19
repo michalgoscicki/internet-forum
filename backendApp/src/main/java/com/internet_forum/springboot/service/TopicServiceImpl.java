@@ -1,17 +1,17 @@
 package com.internet_forum.springboot.service;
 
-import com.internet_forum.springboot.dto.PostRequestDto;
-import com.internet_forum.springboot.dto.PostResponseDto;
-import com.internet_forum.springboot.dto.TopicRequestDto;
-import com.internet_forum.springboot.dto.TopicResponseDto;
+import com.internet_forum.springboot.dto.*;
 import com.internet_forum.springboot.mapper.PostMapper;
 import com.internet_forum.springboot.mapper.TopicMapper;
+import com.internet_forum.springboot.mapper.WatchlistMapper;
 import com.internet_forum.springboot.model.Post;
 import com.internet_forum.springboot.model.Topic;
 import com.internet_forum.springboot.model.UserEntity;
+import com.internet_forum.springboot.model.Watchlist;
 import com.internet_forum.springboot.repository.PostRepository;
 import com.internet_forum.springboot.repository.TopicRepository;
 import com.internet_forum.springboot.repository.UserRepository;
+import com.internet_forum.springboot.repository.WatchlistRepository;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,9 @@ public class TopicServiceImpl implements TopicService {
 
     private TopicRepository topicRepository;
     private TopicMapper topicMapper;
+    private WatchlistMapper watchlistMapper;
     private UserRepository userRepository;
+    private WatchlistRepository watchlistRepository;
     private PostRepository postRepository;
     private PostMapper postMapper;
 
@@ -56,10 +58,6 @@ public class TopicServiceImpl implements TopicService {
                 .map(topicMapper::entityToResponseDto);
     }
 
-    @Override
-    public void deleteTopic() {
-        topicRepository.deleteAll();
-    }
 
     @Override
     public void deleteTopicById(Long id) {
@@ -86,6 +84,18 @@ public class TopicServiceImpl implements TopicService {
 
 
         return topicMapper.entityToResponseDto(topic);
+    }
+
+    @Override
+    public ResponseEntity<String> followTopic(Long topicId, Long userId){
+        Watchlist watchlist = new Watchlist();
+        watchlist.setUser(userRepository.findById(userId).get());
+        watchlist.setTopic(topicRepository.findById(topicId).get());
+
+        watchlistRepository.save(watchlist);
+
+        String responseMessage = "Użytkownik o ID: " + userId + " zaobserwował temat o ID: " + topicId;
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
 }

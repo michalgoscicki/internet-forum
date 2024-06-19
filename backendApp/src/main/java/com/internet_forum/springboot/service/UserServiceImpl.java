@@ -39,7 +39,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(int id) {
-
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new UserDoNotExist("User not found with id: " + id);
+        }
     }
 
 
@@ -50,6 +54,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserDoNotExist("User not found with id: " + id);
         }
+    }
+
+    @Override
+    public boolean isAdmin(int id){
+        UserEntity user = userRepository.findById(id).get();
+        return user.getRoles().contains("ADMIN");
     }
 
 

@@ -8,6 +8,7 @@ import com.internet_forum.springboot.model.Post;
 import com.internet_forum.springboot.model.Topic;
 import com.internet_forum.springboot.model.UserEntity;
 import com.internet_forum.springboot.model.ViolationReport;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-15T19:53:53+0200",
+    date = "2024-06-19T18:46:34+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -34,8 +35,9 @@ public class TopicMapperImpl implements TopicMapper {
         UserEntity author = null;
         List<Post> posts = null;
         List<ViolationReport> violationReports = null;
+        LocalDateTime createdAt = null;
 
-        Topic topic1 = new Topic( title, author, posts, violationReports );
+        Topic topic1 = new Topic( title, author, posts, violationReports, createdAt );
 
         topic1.setContent( topic.content() );
 
@@ -88,11 +90,13 @@ public class TopicMapperImpl implements TopicMapper {
 
         Long id = null;
         String content = null;
+        AuthorEntityResponseDto author = null;
 
         id = post.getId();
         content = post.getContent();
+        author = userEntityToAuthorEntityResponseDto( post.getAuthor() );
 
-        PostResponseDto postResponseDto = new PostResponseDto( id, content );
+        PostResponseDto postResponseDto = new PostResponseDto( id, content, author );
 
         return postResponseDto;
     }

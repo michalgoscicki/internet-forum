@@ -1,5 +1,6 @@
 package com.internet_forum.springboot.mapper;
 
+import com.internet_forum.springboot.dto.AuthorEntityResponseDto;
 import com.internet_forum.springboot.dto.PostRequestDto;
 import com.internet_forum.springboot.dto.PostResponseDto;
 import com.internet_forum.springboot.model.Post;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-15T19:53:53+0200",
+    date = "2024-06-19T18:46:34+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -47,12 +48,30 @@ public class PostMapperImpl implements PostMapper {
 
         Long id = null;
         String content = null;
+        AuthorEntityResponseDto author = null;
 
         id = post.getId();
         content = post.getContent();
+        author = userEntityToAuthorEntityResponseDto( post.getAuthor() );
 
-        PostResponseDto postResponseDto = new PostResponseDto( id, content );
+        PostResponseDto postResponseDto = new PostResponseDto( id, content, author );
 
         return postResponseDto;
+    }
+
+    protected AuthorEntityResponseDto userEntityToAuthorEntityResponseDto(UserEntity userEntity) {
+        if ( userEntity == null ) {
+            return null;
+        }
+
+        Long id = null;
+        String username = null;
+
+        id = userEntity.getId();
+        username = userEntity.getUsername();
+
+        AuthorEntityResponseDto authorEntityResponseDto = new AuthorEntityResponseDto( id, username );
+
+        return authorEntityResponseDto;
     }
 }
