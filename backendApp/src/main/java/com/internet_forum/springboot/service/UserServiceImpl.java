@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(user.getPassword());
             return userRepository.save(user);
         } else {
-            throw new UserDoNotExist("User not found with id:" + updatedUser.getId());
+            throw new UserDoNotExist( updatedUser.getId());
         }
     }
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         } else {
-            throw new UserDoNotExist("User not found with id: " + id);
+            throw new UserDoNotExist(id);
         }
     }
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsById(id)) {
             return userRepository.findById(id);
         } else {
-            throw new UserDoNotExist("User not found with id: " + id);
+            throw new UserDoNotExist(id);
         }
     }
 

@@ -1,23 +1,19 @@
 package com.internet_forum.springboot.controller;
 
 import com.internet_forum.springboot.dto.*;
-import com.internet_forum.springboot.model.Topic;
 import com.internet_forum.springboot.model.UserEntity;
 import com.internet_forum.springboot.repository.PostRepository;
 import com.internet_forum.springboot.repository.TopicRepository;
-import com.internet_forum.springboot.repository.UserRepository;
+import com.internet_forum.springboot.service.PostService;
 import com.internet_forum.springboot.service.TopicService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -28,16 +24,19 @@ public class TopicController {
     private final TopicService topicService;
     private final TopicRepository topicRepository;
     private final PostRepository postRepository;
+    private final PostService postService;
 
 
 
-    public TopicController(TopicService topicService, TopicRepository topicRepository, PostRepository postRepository) {
+
+    public TopicController(TopicService topicService, TopicRepository topicRepository, PostRepository postRepository, PostService postService) {
         this.topicRepository = topicRepository;
         this.topicService = topicService;
         this.postRepository = postRepository;
+        this.postService = postService;
     }
 
-
+//    TOPIC ENDPOINTS
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TopicResponseDto createTopic(@Valid @RequestBody TopicRequestDto topic, Authentication authentication) {
@@ -57,6 +56,12 @@ public class TopicController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<TopicResponseDto> updateTopic(@PathVariable Long id, @RequestBody TopicRequestDto topicRequestDto) {
+        TopicResponseDto updatedTopic = topicService.updateTopic(id, topicRequestDto);
+        return ResponseEntity.ok(updatedTopic);
+    }
+
 
     @DeleteMapping("/{topic_id}")
     public ResponseEntity<String> deleteTopicById(@PathVariable("topic_id") long topicId) {
@@ -67,6 +72,8 @@ public class TopicController {
             return new ResponseEntity<>("Topic not found",HttpStatus.NOT_FOUND);
         }
     }
+
+//    POST ENDPOINTS
 
     @PostMapping("/{topic_id}/post")
     public TopicResponseDto addPost(@RequestBody PostRequestDto post, @PathVariable("topic_id") long topicId, Authentication authentication){
@@ -84,7 +91,14 @@ public class TopicController {
             return new ResponseEntity<>("Post not found",HttpStatus.NOT_FOUND);
         }
     }
+    @PutMapping("/{topic_id}/post/{post_id}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long topic_id, @PathVariable Long post_id, @RequestBody PostRequestDto postRequestDto) {
+        PostResponseDto updatedPost = postService.updatePost(post_id, postRequestDto);
+        return ResponseEntity.ok(updatedPost);
+    }
 
+
+//    WATCHLIST ENDPOINTS
     @PostMapping("/{topic_id}/watchlist")
     public ResponseEntity<String> followTopic(@PathVariable("topic_id") long topicId, Authentication authentication){
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();

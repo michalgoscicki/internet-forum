@@ -1,5 +1,8 @@
 package com.internet_forum.springboot.service;
 
+import com.internet_forum.springboot.Exceptions.LoggedInUserNotFound;
+import com.internet_forum.springboot.Exceptions.TopicNotFoundException;
+import com.internet_forum.springboot.Exceptions.UserDoNotExist;
 import com.internet_forum.springboot.dto.*;
 import com.internet_forum.springboot.mapper.PostMapper;
 import com.internet_forum.springboot.mapper.TopicMapper;
@@ -16,9 +19,12 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +51,22 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public TopicResponseDto updateTopic(Long id, TopicRequestDto topicRequestDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new LoggedInUserNotFound());
+        Topic topic = topicRepository.findById(id)
+                .orElseThrow(() -> new TopicNotFoundException());
+
+        topic.setTitle(topicRequestDto.title());
+        topic.setContent(topicRequestDto.content());
+        topic.setModifiedAt(LocalDateTime.now());
+
+        Topic updatedTopic = topicRepository.save(topic);
+        return topicMapper.entityToResponseDto(updatedTopic);
+    }
+
+    @Override
     public List<TopicResponseDto> getTopics() {
         return topicRepository.findAll()
                 .stream()
@@ -65,7 +87,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public TopicResponseDto addPost(PostRequestDto postRequestDto, Long userId, Long topicId){
+    public TopicResponseDto addPost(PostRequestDto postRequestDto, Long userId, Long topicId) {
         Post post = postMapper.requestDtoToEntity(postRequestDto);
         Optional<Topic> topicOptional = topicRepository.findById(topicId);
 
@@ -96,6 +118,11 @@ public class TopicServiceImpl implements TopicService {
 
         String responseMessage = "Użytkownik o ID: " + userId + " zaobserwował temat o ID: " + topicId;
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    @Override
+    public void deletePost(Long topicId, Long postId) {
+
     }
 
 }
