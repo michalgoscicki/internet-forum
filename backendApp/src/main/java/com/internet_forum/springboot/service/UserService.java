@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface UserService {
 
+
     UserEntity updateUser(UserEntity updatedUser);
+
 
     void deleteById(int id);
 
