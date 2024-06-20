@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -41,4 +43,5 @@ public class PostServiceImpl implements PostService {
         return postMapper.entityToResponseDto(updatedPost);
 
     }
+
 }
