@@ -28,8 +28,6 @@ const login = async () => {
   if (auth.token) {
     await router.push('/')
   }
-  console.log(auth.user)
-  console.log(auth.token)
 }
 </script>
 

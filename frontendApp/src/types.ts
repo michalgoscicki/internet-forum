@@ -12,6 +12,11 @@ export interface NewTopic {
     content: string;
 }
 
+export interface NewPost {
+    id: number;
+    content: string;
+}
+
 export interface Author {
     id: number;
     username: string;
