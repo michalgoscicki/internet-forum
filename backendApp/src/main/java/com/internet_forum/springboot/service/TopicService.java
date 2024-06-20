@@ -20,6 +20,8 @@ public interface TopicService {
     TopicResponseDto addPost(PostRequestDto postRequestDto, Long userId, Long topicId);
 
     ResponseEntity<String> followTopic(Long topicId, Long userId);
+    ResponseEntity<String> unfollowTopic(Long topicId, Long userId);
+
 
     void deletePost(Long topicId, Long postId);
 

@@ -117,12 +117,21 @@ public class TopicServiceImpl implements TopicService {
         Watchlist watchlist = new Watchlist();
         watchlist.setUser(userRepository.findById(userId).get());
         watchlist.setTopic(topicRepository.findById(topicId).get());
-
         watchlistRepository.save(watchlist);
-
         String responseMessage = "Użytkownik o ID: " + userId + " zaobserwował temat o ID: " + topicId;
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<String> unfollowTopic(Long topicId, Long userId) {
+        Watchlist watchlist = (Watchlist) watchlistRepository.findByTopicIdAndUserId(topicId, userId)
+                .orElseThrow(() -> new RuntimeException("Watchlist entry not found for topicId: " + topicId + " and userId: " + userId));
+
+        watchlistRepository.delete(watchlist);
+        return new ResponseEntity<>("User with ID:" + userId + " unfollow topic with ID: " + topicId, HttpStatus.OK);
+
+    }
+
 
     @Override
     public void deletePost(Long topicId, Long postId) {

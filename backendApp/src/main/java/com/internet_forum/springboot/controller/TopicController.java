@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.kerberos.KerberosKey;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,6 +108,14 @@ public class TopicController {
         Long userId = userEntity.getId();
         return topicService.followTopic(topicId, userId);
     }
+
+
+    @PostMapping("/{topic_id}/unfollow")
+    public ResponseEntity<String> unfollowTopic(@PathVariable("topic_id") Long topicId, Authentication authentication) {
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        return topicService.unfollowTopic(topicId, userEntity.getId());
+    }
+
     @GetMapping("/{topic_id}/followers")
     public ResponseEntity<List<UserResponseDto>> getFollowers(@PathVariable("topic_id") Long topicId) {
         List<UserResponseDto> followers = topicService.getFollowersByTopicId(topicId);
