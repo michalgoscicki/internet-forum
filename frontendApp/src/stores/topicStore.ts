@@ -38,12 +38,43 @@ export const useTopicStore = defineStore("topicStore", () => {
             }).catch((error) => console.error(error));
         }
 
+        const deletePost = async (topicId: number, postId: number) => {
+            await $fetchApi(`/api/v1/topics/${topicId}/post/${postId}`, {
+                method: "DELETE",
+                headers: {Authorization: 'Bearer ' + auth.token},
+            }).catch((error) => console.error(error));
+        }
+
+        const editTopic = async (topicId: number, title: string, content: string) => {
+            await $fetchApi(`/api/v1/topics/${topicId}`, {
+                method: "PUT",
+                body: {
+                    title: title,
+                    content: content,
+                },
+                headers: {Authorization: 'Bearer ' + auth.token},
+            }).catch((error) => console.error(error));
+        }
+
+        const editPost = async (topicId: number, postId: number, content: string) => {
+            await $fetchApi(`/api/v1/topics/${topicId}/post/${postId}`, {
+                method: "PUT",
+                body: {
+                    content: content,
+                },
+                headers: {Authorization: 'Bearer ' + auth.token},
+            }).catch((error) => console.error(error));
+        };
+
         return {
             createTopic,
             deleteTopic,
             topicList,
             refreshTopicList,
-            createPost
+            createPost,
+            deletePost,
+            editPost,
+            editTopic,
         };
     })
 ;
