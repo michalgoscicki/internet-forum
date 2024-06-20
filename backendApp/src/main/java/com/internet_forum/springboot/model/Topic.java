@@ -17,7 +17,7 @@ public class Topic extends BaseDatedEntity {
 
     private LocalDateTime createdAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity author;
 

@@ -1,9 +1,14 @@
 package com.internet_forum.springboot.repository;
 
+import com.internet_forum.springboot.mapper.WatchlistMapper;
 import com.internet_forum.springboot.model.Watchlist;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface WatchlistRepository extends JpaRepository<Watchlist, Long> {
+    List<Watchlist> findByUserId(Long userId);
 }
