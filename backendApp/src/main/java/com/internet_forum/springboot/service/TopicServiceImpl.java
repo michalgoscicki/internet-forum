@@ -6,6 +6,7 @@ import com.internet_forum.springboot.Exceptions.UserDoNotExist;
 import com.internet_forum.springboot.dto.*;
 import com.internet_forum.springboot.mapper.PostMapper;
 import com.internet_forum.springboot.mapper.TopicMapper;
+import com.internet_forum.springboot.mapper.UserMapper;
 import com.internet_forum.springboot.mapper.WatchlistMapper;
 import com.internet_forum.springboot.model.Post;
 import com.internet_forum.springboot.model.Topic;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,6 +41,8 @@ public class TopicServiceImpl implements TopicService {
     private WatchlistRepository watchlistRepository;
     private PostRepository postRepository;
     private PostMapper postMapper;
+    private UserMapper userMapper;
+    private EmailService emailService;
 
 
     @Override
@@ -89,27 +93,27 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TopicResponseDto addPost(PostRequestDto postRequestDto, Long userId, Long topicId) {
         Post post = postMapper.requestDtoToEntity(postRequestDto);
-        Optional<Topic> topicOptional = topicRepository.findById(topicId);
-
-//        if (!topicOptional.isPresent()) {
-//            throw new ResourceNotFoundException("Topic not found with id: " + topicId);
-//        }
-
-        Topic topic = topicOptional.get();
-        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        Topic topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new TopicNotFoundException());
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new LoggedInUserNotFound());
 
         post.setTopic(topic);
-        post.setAuthor(userOptional.get());
+        post.setAuthor(user);
         topic.getPosts().add(post);
-
         postRepository.save(post);
 
+        List<UserResponseDto> followers = getFollowersByTopicId(topicId);
+        for (UserResponseDto follower : followers) {
+            emailService.sendEmail(follower.email(), "New post in: " + topic.getTitle(),
+                    "A new post has been added by " + user.getUsername() + ": " + post.getContent());
+        }
 
         return topicMapper.entityToResponseDto(topic);
     }
 
     @Override
-    public ResponseEntity<String> followTopic(Long topicId, Long userId){
+    public ResponseEntity<String> followTopic(Long topicId, Long userId) {
         Watchlist watchlist = new Watchlist();
         watchlist.setUser(userRepository.findById(userId).get());
         watchlist.setTopic(topicRepository.findById(topicId).get());
@@ -123,6 +127,14 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deletePost(Long topicId, Long postId) {
 
+
     }
 
+    @Override
+    public List<UserResponseDto> getFollowersByTopicId(Long topicId) {
+        List<Watchlist> watchlist = watchlistRepository.findByTopicId(topicId);
+        return watchlist.stream()
+                .map(watchlistItem -> userMapper.entityToResponseDto(watchlistItem.getUser()))
+                .collect(Collectors.toList());
+    }
 }

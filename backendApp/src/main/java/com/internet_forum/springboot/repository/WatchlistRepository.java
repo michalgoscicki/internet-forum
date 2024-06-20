@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface WatchlistRepository extends JpaRepository<Watchlist, Long> {
     List<Watchlist> findByUserId(Long userId);
+
+    List<Watchlist> findByTopicId(Long topicId);
 }

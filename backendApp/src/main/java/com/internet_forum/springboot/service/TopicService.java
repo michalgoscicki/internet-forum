@@ -23,6 +23,8 @@ public interface TopicService {
 
     void deletePost(Long topicId, Long postId);
 
+    List<UserResponseDto>getFollowersByTopicId(Long topicId);
+
 
 }
 

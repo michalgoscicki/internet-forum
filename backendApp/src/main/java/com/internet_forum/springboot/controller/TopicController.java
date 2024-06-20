@@ -76,10 +76,11 @@ public class TopicController {
 //    POST ENDPOINTS
 
     @PostMapping("/{topic_id}/post")
-    public TopicResponseDto addPost(@RequestBody PostRequestDto post, @PathVariable("topic_id") long topicId, Authentication authentication){
+    public ResponseEntity<TopicResponseDto> addPost(@RequestBody PostRequestDto post, @PathVariable("topic_id") long topicId, Authentication authentication){
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         Long userId = userEntity.getId();
-        return topicService.addPost(post, userId,topicId);
+        TopicResponseDto response = topicService.addPost(post, userId, topicId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{topic_id}/post/{post_id}")
@@ -104,5 +105,10 @@ public class TopicController {
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         Long userId = userEntity.getId();
         return topicService.followTopic(topicId, userId);
+    }
+    @GetMapping("/{topic_id}/followers")
+    public ResponseEntity<List<UserResponseDto>> getFollowers(@PathVariable("topic_id") Long topicId) {
+        List<UserResponseDto> followers = topicService.getFollowersByTopicId(topicId);
+        return ResponseEntity.ok(followers);
     }
 }
