@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type {NewTopic} from "~/types";
-
 const topic = reactive({
   title: '',
   content: '',
@@ -8,9 +6,6 @@ const topic = reactive({
 const topicStore = useTopicStore()
 const createTopic = async () => {
   await topicStore.createTopic(topic)
-
-  // topic.title = ''
-  // topic.content = ''
 
   const route = useRoute()
   if (route.path === '/topics') {

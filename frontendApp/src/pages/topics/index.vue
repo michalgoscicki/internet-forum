@@ -13,6 +13,7 @@ const router = useRouter()
                   :content="topic.content"
                   :author="topic.author"
                   :posts="topic.posts"
+                  :refresh="topicStore.refreshTopicList"
                   @click="router.push(`/topics/${topic.id}`)"
     />
   <div class="flex">

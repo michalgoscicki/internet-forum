@@ -16,12 +16,14 @@ const {data: currentTopic, refresh: refreshCurrentTopic} = await useFetchApi<Top
                 :content="currentTopic?.content || ''"
                 :author="currentTopic?.author || {username: '', id: 0} "
                 :posts="currentTopic?.posts || []"
+                :refresh="refreshCurrentTopic"
   />
 
   <single-post v-for="post in currentTopic?.posts" :key="post.id"
                :id="post.id"
                :content="post.content"
                :author="post.author"
+               :refresh="refreshCurrentTopic"
   />
 
   <post-creation-form :topicId="currentTopic?.id || 0" :refresh="refreshCurrentTopic" class="mx-1/6 mt-4rem" />

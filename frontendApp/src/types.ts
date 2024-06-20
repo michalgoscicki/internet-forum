@@ -5,6 +5,19 @@ export interface User {
     password: string;
     name: string;
     surname: string;
+    roles: {
+        id: number;
+        name: string;
+    }[];
+}
+
+export interface NewUser {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    name: string;
+    surname: string;
 }
 
 export interface NewTopic {
@@ -27,6 +40,7 @@ export interface Post {
     id: number;
     content: string;
     author: Author;
+    refresh: Function;
 }
 
 export interface Topic {
@@ -35,4 +49,5 @@ export interface Topic {
     content: string;
     author: Author
     posts: Post[];
+    refresh: Function;
 }

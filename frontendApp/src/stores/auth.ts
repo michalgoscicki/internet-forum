@@ -1,5 +1,5 @@
 import {useLocalStorage} from "@vueuse/core";
-import type {User} from "~/types";
+import type {NewUser, User} from "~/types";
 import {$fetchApi} from "~/composables/$fetchApi";
 
 const emptyUser: User = {
@@ -8,7 +8,11 @@ const emptyUser: User = {
     email: "",
     password: "",
     name: "",
-    surname: ""
+    surname: "",
+    roles: {
+        id: 0,
+        name: "",
+    },
 };
 
 export const useAuthStore = defineStore("auth", () => {
@@ -20,6 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
             method: "POST",
             body: {username, password},
         });
+        console.log(data)
         if (data.accessToken) {
             token.value = data.accessToken;
             user.value = {
@@ -28,12 +33,13 @@ export const useAuthStore = defineStore("auth", () => {
                 email: data.user.email,
                 password: "",
                 name: data.user.name,
-                surname: data.user.surname
+                surname: data.user.surname,
+                roles: data.user.roles,
             };
         }
     };
 
-    const register = async (newUser: User) => {
+    const register = async (newUser: NewUser) => {
         const data = await $fetchApi("/api/v1/register", {
             method: "POST",
             body: {
@@ -51,7 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
         user.value = emptyUser;
     };
 
-    const updateProfile = async (updatedUser: User) => {
+    const updateProfile = async (updatedUser: User) => { // TODO: to chyba nie jest sprawdzone ani zaimplementowane
         if (!updatedUser.username.trim()) {
             updatedUser.username = user.value.username
         } else {
