@@ -6,17 +6,20 @@ const auth = useAuthStore()
   <title>Twoje forum</title>
   <body class="bg-blue-300 min-h-screen">
   <ul class="text-2xl font-semibold sm:flex justify-around py-1rem color-black border-b-1 border-b-cool-800 mx-2rem">
-    <NuxtLink to="/">
+    <NuxtLink to="/topics" v-if="auth.isLoggedIn">
       <li>Strona główna</li>
     </NuxtLink>
     <NuxtLink to="/auth/login" v-if="!auth.isLoggedIn">
-      <li>zaloguj się</li>
+      <li>Zaloguj się</li>
     </NuxtLink>
     <NuxtLink to="/auth/register" v-if="!auth.isLoggedIn">
-      <li>załóż konto</li>
+      <li>Załóż konto</li>
+    </NuxtLink>
+    <NuxtLink to="/topics/followed" v-if="auth.isLoggedIn">
+      <li>Obserwowane</li>
     </NuxtLink>
     <NuxtLink to="/auth/logout" v-if="auth.isLoggedIn">
-      <li>wyloguj się</li>
+      <li>Wyloguj się</li>
     </NuxtLink>
 
   </ul>
