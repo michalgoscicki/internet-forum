@@ -26,5 +26,5 @@ const {data: currentTopic, refresh: refreshCurrentTopic} = await useFetchApi<Top
                :refresh="refreshCurrentTopic"
   />
 
-  <post-creation-form :topicId="currentTopic?.id || 0" :refresh="refreshCurrentTopic" class="mx-1/6 mt-4rem" />
+  <post-creation-form :topicId="currentTopic?.id || 0" :refresh="refreshCurrentTopic" class="mx-1/6 mt-4rem"/>
 </template>

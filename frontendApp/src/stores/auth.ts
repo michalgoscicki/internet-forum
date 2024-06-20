@@ -9,10 +9,10 @@ const emptyUser: User = {
     password: "",
     name: "",
     surname: "",
-    roles: {
+    roles: [{
         id: 0,
         name: "",
-    },
+    }],
 };
 
 export const useAuthStore = defineStore("auth", () => {
@@ -52,9 +52,11 @@ export const useAuthStore = defineStore("auth", () => {
         });
     };
 
-    const logout = () => {
+    const logout = async () => {
         token.value = "";
         user.value = emptyUser;
+        const topicStore = useTopicStore()
+        await topicStore.refreshFollowedTopicList()
     };
 
     const updateProfile = async (updatedUser: User) => { // TODO: to chyba nie jest sprawdzone ani zaimplementowane

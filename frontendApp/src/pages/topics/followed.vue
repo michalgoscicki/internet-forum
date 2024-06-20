@@ -7,16 +7,22 @@ const router = useRouter()
 </script>
 
 <template>
-  <single-topic v-for="topic in topicStore.topicList" :key="topic.id"
+  <single-topic v-for="topic in topicStore.followedTopicList" :key="topic.id"
                 :id="topic.id"
                 :title="topic.title"
                 :content="topic.content"
                 :author="topic.author"
                 :posts="topic.posts"
-                :refresh="topicStore.refreshTopicList"
+                :refresh="topicStore.refreshFollowedTopicList"
                 @click="router.push(`/topics/${topic.id}`)"
   />
   <div class="flex">
-    <topic-creation-form class="mx-auto mt-4rem"/>
+    <p v-if="!topicStore.followedTopicList?.length" class="color-black text-xl flex mx-auto mt-1rem">
+      Nic nie obserwujesz?
+      <NuxtLink to="/topics" class="color-emerald-600 mx-1 font-bold hover:animate-pulse">
+        Zacznij zapisywać
+      </NuxtLink>
+      swoje ulubione wpisy!
+    </p>
   </div>
 </template>
