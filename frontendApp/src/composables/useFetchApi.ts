@@ -6,9 +6,9 @@ export const useFetchApi: useFetchType = (path, options = {}) => {
     return useFetch(url, {
         ...options,
         onResponseError() {
-            if (auth.token) {
-                auth.logout()
-            }
+            // if (auth.token) {
+            //      auth.logout()   // TODO: uncomment later
+            // }
         }
     });
 }
