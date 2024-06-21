@@ -24,7 +24,6 @@ export const useAuthStore = defineStore("auth", () => {
             method: "POST",
             body: {username, password},
         });
-        console.log(data)
         if (data.accessToken) {
             token.value = data.accessToken;
             user.value = {
@@ -40,7 +39,7 @@ export const useAuthStore = defineStore("auth", () => {
     };
 
     const register = async (newUser: NewUser) => {
-        const data = await $fetchApi("/api/v1/register", {
+        await $fetchApi("/api/v1/register", {
             method: "POST",
             body: {
                 email: newUser.email,
