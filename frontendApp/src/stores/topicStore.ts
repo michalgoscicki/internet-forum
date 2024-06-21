@@ -8,7 +8,10 @@ export const useTopicStore = defineStore("topicStore", () => {
             headers: {Authorization: 'Bearer ' + auth.token},
         })
 
-        const {data: followedTopicList, refresh: refreshFollowedTopicList} = useFetchApi<Topic[]>("/api/v1/users/followedTopics", {
+        const {
+            data: followedTopicList,
+            refresh: refreshFollowedTopicList
+        } = useFetchApi<Topic[]>("/api/v1/users/followedTopics", {
             headers: {Authorization: 'Bearer ' + auth.token},
         })
 
@@ -44,10 +47,13 @@ export const useTopicStore = defineStore("topicStore", () => {
         const followTopic = async (topicId: number) => {
             await $fetchApi(`/api/v1/topics/${topicId}/watchlist`, {
                 method: "POST",
-                // body: {
-                //     title: topic.title,
-                //     content: topic.content,
-                // },
+                headers: {Authorization: 'Bearer ' + auth.token},
+            }).catch((error) => console.error(error));
+        };
+
+        const unfollowTopic = async (topicId: number) => {
+            await $fetchApi(`/api/v1/topics/${topicId}/unfollow`, {
+                method: "POST",
                 headers: {Authorization: 'Bearer ' + auth.token},
             }).catch((error) => console.error(error));
         };
@@ -88,6 +94,7 @@ export const useTopicStore = defineStore("topicStore", () => {
             editTopic,
             deleteTopic,
             followTopic,
+            unfollowTopic,
             createPost,
             editPost,
             deletePost,

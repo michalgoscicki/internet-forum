@@ -11,6 +11,12 @@ export interface User {
     }[];
 }
 
+export interface Follower {
+    id: number;
+    username: string;
+    email: string;
+}
+
 export interface NewUser {
     id: number;
     username: string;
