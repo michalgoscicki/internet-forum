@@ -4,18 +4,9 @@ import com.internet_forum.springboot.Exceptions.LoggedInUserNotFound;
 import com.internet_forum.springboot.Exceptions.TopicNotFoundException;
 import com.internet_forum.springboot.Exceptions.UserDoNotExist;
 import com.internet_forum.springboot.dto.*;
-import com.internet_forum.springboot.mapper.PostMapper;
-import com.internet_forum.springboot.mapper.TopicMapper;
-import com.internet_forum.springboot.mapper.UserMapper;
-import com.internet_forum.springboot.mapper.WatchlistMapper;
-import com.internet_forum.springboot.model.Post;
-import com.internet_forum.springboot.model.Topic;
-import com.internet_forum.springboot.model.UserEntity;
-import com.internet_forum.springboot.model.Watchlist;
-import com.internet_forum.springboot.repository.PostRepository;
-import com.internet_forum.springboot.repository.TopicRepository;
-import com.internet_forum.springboot.repository.UserRepository;
-import com.internet_forum.springboot.repository.WatchlistRepository;
+import com.internet_forum.springboot.mapper.*;
+import com.internet_forum.springboot.model.*;
+import com.internet_forum.springboot.repository.*;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -43,6 +34,8 @@ public class TopicServiceImpl implements TopicService {
     private PostMapper postMapper;
     private UserMapper userMapper;
     private EmailService emailService;
+    private ViolationReportMapper violationReportMapper;
+    private ViolationReportRepository violationReportRepository;
 
 
     @Override
@@ -123,6 +116,18 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public ResponseEntity<String> reportTopic(ViolationReportRequestDto violationReportRequestDto, Long topicId, Long userId){
+        ViolationReport violationReport = violationReportMapper.requestDtoToEntity(violationReportRequestDto);
+        violationReport.setReporter(userRepository.findById(userId).get());
+        violationReport.setTopic(topicRepository.findById(topicId).get());
+        violationReport.setReason(violationReport.getReason());
+        violationReportRepository.save(violationReport);
+        String responseMessage = "Użytkownik o ID: " + userId + " zgłosił temat o ID: " + topicId;
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+
+    }
+
+    @Override
     public ResponseEntity<String> unfollowTopic(Long topicId, Long userId) {
         Watchlist watchlist = (Watchlist) watchlistRepository.findByTopicIdAndUserId(topicId, userId)
                 .orElseThrow(() -> new RuntimeException("Watchlist entry not found for topicId: " + topicId + " and userId: " + userId));
@@ -132,12 +137,8 @@ public class TopicServiceImpl implements TopicService {
 
     }
 
-
     @Override
-    public void deletePost(Long topicId, Long postId) {
-
-
-    }
+    public void deletePost(Long topicId, Long postId) {}
 
     @Override
     public List<UserResponseDto> getFollowersByTopicId(Long topicId) {

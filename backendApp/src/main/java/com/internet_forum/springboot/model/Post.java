@@ -23,16 +23,13 @@ public class Post extends BaseDatedEntity {
     private String content;
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ViolationReport> violationReports = new ArrayList<>();
-
     protected Post(){}
-    public Post(Topic topic, UserEntity author, String content, LocalDateTime createdAt, List<ViolationReport> violationReports) {
+    public Post(Topic topic, UserEntity author, String content, LocalDateTime createdAt) {
         this.topic = topic;
         this.author = author;
         this.content = content;
         this.createdAt = createdAt;
-        this.violationReports = violationReports;
+
     }
 
     public Long getId() {
@@ -75,11 +72,5 @@ public class Post extends BaseDatedEntity {
         this.createdAt = createdAt;
     }
 
-    public List<ViolationReport> getViolationReports() {
-        return violationReports;
-    }
 
-    public void setViolationReports(List<ViolationReport> violationReports) {
-        this.violationReports = violationReports;
-    }
 }

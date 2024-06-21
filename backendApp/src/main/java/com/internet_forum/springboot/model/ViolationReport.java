@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class ViolationReport {
+public class ViolationReport extends BaseDatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,22 +18,56 @@ public class ViolationReport {
     @JoinColumn(name = "topic_id", nullable = true)
     private Topic topic;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = true)
-    private Post post;
-
     private String reason;
     private LocalDateTime reportedAt;
 
-    protected ViolationReport(){}
-    public ViolationReport(UserEntity reporter, Topic topic, Post post, String reason, LocalDateTime reportedAt) {
+    public ViolationReport(){}
+    public ViolationReport(UserEntity reporter, Topic topic, String reason, LocalDateTime reportedAt) {
         this.reporter = reporter;
         this.topic = topic;
-        this.post = post;
         this.reason = reason;
         this.reportedAt = reportedAt;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserEntity getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(UserEntity reporter) {
+        this.reporter = reporter;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public LocalDateTime getReportedAt() {
+        return reportedAt;
+    }
+
+    public void setReportedAt(LocalDateTime reportedAt) {
+        this.reportedAt = reportedAt;
+    }
 }
 

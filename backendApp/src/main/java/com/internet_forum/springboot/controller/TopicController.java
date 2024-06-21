@@ -121,4 +121,12 @@ public class TopicController {
         List<UserResponseDto> followers = topicService.getFollowersByTopicId(topicId);
         return ResponseEntity.ok(followers);
     }
+
+    @PostMapping("/{topic_id}/report")
+    public ResponseEntity<String> reportTopic(@RequestBody ViolationReportRequestDto violationReportRequestDto, @PathVariable("topic_id") long topicId, Authentication authentication){
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        Long userId = userEntity.getId();
+        return topicService.reportTopic(violationReportRequestDto, topicId, userId);
+
+    }
 }

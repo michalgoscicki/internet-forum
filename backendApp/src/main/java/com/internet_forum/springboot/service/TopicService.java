@@ -26,7 +26,7 @@ public interface TopicService {
     void deletePost(Long topicId, Long postId);
 
     List<UserResponseDto>getFollowersByTopicId(Long topicId);
-
+    ResponseEntity<String> reportTopic(ViolationReportRequestDto violationReportRequestDto, Long topicId, Long userId);
 
 }
 
