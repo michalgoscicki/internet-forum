@@ -107,6 +107,10 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public ResponseEntity<String> followTopic(Long topicId, Long userId) {
+        if (watchlistRepository.findByTopicIdAndUserId(topicId, userId).isPresent()) {
+            String responseMessage = "Użytkownik o ID: " + userId + " już obserwuje temat o ID: " + topicId;
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
         Watchlist watchlist = new Watchlist();
         watchlist.setUser(userRepository.findById(userId).get());
         watchlist.setTopic(topicRepository.findById(topicId).get());
