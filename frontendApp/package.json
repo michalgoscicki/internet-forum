@@ -10,11 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.1.4",
     "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
     "@pinia/nuxt": "^0.5.1",
     "@unocss/nuxt": "^0.60.3",
     "@vueuse/core": "^10.10.0",
     "@vueuse/nuxt": "^10.10.0",
+    "heroicons": "^2.1.4",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
     "typescript": "^5.4.5",

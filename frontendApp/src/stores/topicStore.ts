@@ -58,6 +58,16 @@ export const useTopicStore = defineStore("topicStore", () => {
             }).catch((error) => console.error(error));
         };
 
+        const reportTopic = async (topicId: number, reason: string) => {
+            await $fetchApi(`/api/v1/topics/${topicId}/report`, {
+                method: "POST",
+                body: {
+                    reason: reason,
+                },
+                headers: {Authorization: 'Bearer ' + auth.token},
+            }).catch((error) => console.error(error));
+        };
+
         const createPost = async (post: NewPost) => {
             await $fetchApi(`/api/v1/topics/${post.id}/post`, {
                 method: "POST",
@@ -95,6 +105,7 @@ export const useTopicStore = defineStore("topicStore", () => {
             deleteTopic,
             followTopic,
             unfollowTopic,
+            reportTopic,
             createPost,
             editPost,
             deletePost,
