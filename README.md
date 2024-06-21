@@ -1,22 +1,22 @@
-<h1>Nazwa projektu:</h1>
+# Nazwa projektu:
 Forum Internetowe
 
-<h2>Autorzy:</h2>
-Mateusz Horczak, Szymon Łupiński, Michał Gościcki
+## Autorzy:
+[Mateusz Horczak](https://github.com/mateuszhorczak), [Szymon Łupiński](https://github.com/NewbieDuck), [Michał Gościcki](https://github.com/michalgoscicki)
 
-<h2>Główne funkcjonalności:</h2>
+## Główne funkcjonalności:
 - Przeglądanie, dodawanie, edycja i usuwanie postów i topiców.<br/>
 - Możliwość moderowania tematów i postów.<br/>
 - Możliwość zgłaszania naruszeń regulaminu.<br/>
 - Możliwość obserwowania wybranych tematów z powiadomieniem poprzez e-mail<br/>
 - uwierzytelnianie<br/>
 
-<h2>Frontend:</h2>
+## Frontend:
 1. Zainstalowanie pm bun.js `npm install -g bun`<br/>
 2. W folderze frontendApp:<br/>
    - `bun i` do zainstalowania modułów<br/>
    - `bun run dev` do uruchomienia aplikacji
 
-<h2>Backend:</h2>
+## Backend:
 1. `java 21` - wersja javy<br/>
 2. `mysql 8.0+` - wersja mysql
